@@ -1,0 +1,34 @@
+# Optional advanced configuration.
+# Most people only need the add-on's Configuration tab. For anything more,
+# put this file at /addon_configs/<id>_beechfront/config.yaml on your
+# Home Assistant host (with the File editor or Studio Code Server add-on).
+# Values on the Configuration tab take priority over this file.
+
+unraid:
+  # Point specific containers at a different address (e.g. your reverse proxy)
+  urls:
+    vaultwarden: https://vault.example.co.uk
+  insecure: true          # accept Unraid's self-signed certificate
+
+unifi:
+  webUrl: https://unifi.ui.com
+  insecure: true
+
+# Links can be grouped here instead of (not as well as) on the Configuration tab.
+# `check: false` skips the up/down check; `check` can also be a different URL to probe.
+links:
+  - name: Infrastructure
+    items:
+      - name: Unraid
+        url: http://tower.local
+        icon: unraid
+        pinned: true
+      - name: UniFi
+        url: https://192.168.1.1
+        icon: unifi
+        pinned: true
+  - name: Household
+    items:
+      - name: Bin collections
+        url: https://www.gov.uk/rubbish-collection-day
+        check: false

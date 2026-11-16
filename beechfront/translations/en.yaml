@@ -1,0 +1,46 @@
+configuration:
+  title:
+    name: Title
+    description: Shown at the top of the console.
+  subtitle:
+    name: Subtitle
+  unraid_url:
+    name: Unraid address
+    description: How Home Assistant reaches Unraid, e.g. http://192.168.1.10
+  unraid_api_key:
+    name: Unraid API key
+    description: Unraid → Settings → Management Access → API Keys (admin role, or read access plus Docker and VM control).
+  unraid_web_url:
+    name: Unraid link
+    description: Optional address to open when you click through to Unraid, e.g. http://tower.local
+  unraid_host_address:
+    name: Container link address
+    description: Optional. Address used to build container web UI links. Defaults to the host in the Unraid address.
+  favourite_containers:
+    name: Favourite containers
+    description: Container names to show in Quick launch on the overview.
+  hidden_containers:
+    name: Hidden containers
+    description: Container names to leave out entirely.
+  ha_vm_name:
+    name: Home Assistant VM name
+    description: The name of this VM in Unraid.
+  unifi_url:
+    name: UniFi address
+    description: Your UniFi gateway or console, e.g. https://192.168.1.1
+  unifi_api_key:
+    name: UniFi API key
+    description: UniFi Network → Settings → Control Plane → Integrations.
+  unifi_site:
+    name: UniFi site
+  unifi_api_base:
+    name: UniFi API path
+    description: Only needed for a self-hosted UniFi Network Application.
+  low_battery:
+    name: Low battery threshold (%)
+  hidden_entities:
+    name: Hidden entities
+    description: Entity IDs to ignore. End with * to match a prefix, e.g. sensor.sun_*
+  links:
+    name: Links
+    description: Bookmarks. Icon is a name from dashboardicons.com (e.g. plex) or an image URL. Pinned links go in Quick launch.

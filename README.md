@@ -1,6 +1,6 @@
 # BeechFront
 
-Front page and admin console for everything at Beech – one place on the Mac or iPhone to see what needs attention and act on it across Unraid, Docker, Home Assistant and UniFi.
+Front page and admin console for everything at Beech. It runs as a **Home Assistant add-on**, so it lives in the HA sidebar on the Mac and in the Home Assistant app on the iPhone.
 
 ![Overview](docs/screenshots/desktop-overview.png)
 
@@ -8,74 +8,63 @@ It's meant for running the house, so you can act on things from it as well as lo
 
 | Page | What you can do |
 | --- | --- |
-| **Overview** | A **Needs attention** list pulled from every system: disks with errors or running hot, stopped autostart containers, the HA VM being down, low batteries, pending HA updates, offline UniFi devices, firmware updates, links that aren't responding. Plus quick launch and a summary card for each system. |
-| **Containers** | Start, stop and restart containers, open their web UIs (worked out from Unraid's WebUI templates) and read or filter their logs. |
-| **Server** | Unraid CPU, RAM, array capacity, per-disk usage, temperatures and errors, and unread notifications. Start, shut down, reboot or force-stop VMs (including Home Assistant). |
-| **Home** | Home Assistant lights, switches, heating, locks, covers, scenes, scripts and automations, all controllable. You can also install updates, check the config, restart HA and search every entity. |
-| **Network** | WAN throughput, UniFi devices (with CPU and memory, and a restart button) and every client, searchable by name, IP or MAC. |
-| **Links** | Your bookmarks, grouped, each with a live up/down check and response time. Container web UIs are added automatically. |
-| **Notes** | House notes, saved on the server: boiler service dates, where the stopcock is, to-dos. |
+| **Overview** | A **Needs attention** list across every system: disks with errors or running hot, stopped autostart containers, low batteries, pending HA updates, offline UniFi devices, firmware updates, links that aren't responding. Plus quick launch and a summary card for each system. |
+| **Containers** | Start, stop and restart your Unraid containers and open their web UIs. |
+| **Server** | Unraid CPU, RAM, array capacity, per-disk usage, temperatures and errors, and unread notifications. Start, shut down, reboot or force-stop VMs. |
+| **Home** | Lights, switches, heating, locks, covers, scenes, scripts and automations, all controllable. You can also install updates, check the config, restart HA and search every entity. |
+| **Network** | WAN throughput, UniFi devices (with CPU, memory and a restart button) and every client, searchable by name, IP or MAC. |
+| **Links** | Grouped bookmarks with live up/down checks. Container web UIs are added automatically. |
+| **Notes** | House notes: boiler service dates, where the stopcock is, to-dos. |
 
-Press **⌘K** (or `/`) anywhere to search and run things, for example "restart plex", "kitchen" to toggle a light, or "open unifi". On the iPhone, open it in Safari and use **Share → Add to Home Screen** to install it as an app.
+Press **⌘K** (or `/`) to search and run anything, for example "restart plex", "kitchen" to toggle a light, or "open unifi". Anything that changes something asks you to confirm first.
 
-Anything that changes something (stopping a container, rebooting a VM, unlocking a door, restarting the gateway) asks you to confirm first.
+## Install
 
-## Install on Unraid
+The add-on lives in [`beechfront/`](beechfront). Home Assistant builds it from source on install, so there's no image to publish. There are two ways to get it into HA.
 
-1. **Get the image.** Pushes to `main` build `ghcr.io/benjamin-leo-code/beechfront:latest` via GitHub Actions. If the repo is private, either make the package public under GitHub → Packages, or build it on Unraid with `docker build -t beechfront .`.
-2. **Add the container.** Copy `templates/beechfront.xml` to `/boot/config/plugins/dockerMan/templates-user/my-beechfront.xml`. Then go to **Docker → Add Container** and choose *beechfront*. (`docker-compose.yml` is there as an alternative if you use the Compose Manager plugin.)
-3. **Configure it.** Copy `config/config.example.yaml` to `/mnt/user/appdata/beechfront/config/config.yaml` and fill in your addresses. Put the secrets in the container's variables, not in the file.
-4. Open `http://<unraid-ip>:8484`.
+**A. As an add-on repository (easiest updates).** This only works if this GitHub repo is **public**. Home Assistant can't read private repos, and there's nothing secret in the code.
+1. In HA go to **Settings → Add-ons → Add-on Store → ⋮ → Repositories** and add `https://github.com/Benjamin-Leo-Code/BeechFront`.
+2. Find **BeechFront** in the store and select **Install**. The first build takes a few minutes.
 
-### Keys you'll need
+**B. As a local add-on (repo can stay private).**
+1. Copy the `beechfront` folder into the `addons` share on Home Assistant, using the Samba share or the SSH / Studio Code Server add-ons, so you have `/addons/beechfront/config.yaml`.
+2. Go to **Settings → Add-ons → Add-on Store → ⋮ → Check for updates**. BeechFront appears under **Local add-ons**.
+3. To update later, copy the folder over again with a higher `version` in `config.yaml`.
 
-| System | Where to create it | Variable |
-| --- | --- | --- |
-| Console login | Choose a password | `BEECHFRONT_PASSWORD` |
-| Unraid (7.x) | Settings → Management Access → API Keys | `UNRAID_API_KEY` |
-| Home Assistant | Profile → Security → Long-lived access tokens | `HA_TOKEN` |
-| UniFi Network (9+) | UniFi Network → Settings → Control Plane → Integrations | `UNIFI_API_KEY` |
-| Docker | Mount `/var/run/docker.sock` (the template already does this) | – |
-
-You can leave any of them out. That system's page just won't appear.
-
-### Security
-
-The console can stop containers, reboot VMs and unlock doors, and having the Docker socket mounted gives it root-equivalent access to the server. Keep these rules:
-
-- **Always set `BEECHFRONT_PASSWORD`.** Sessions last 30 days, so the iPhone won't keep asking you to sign in.
-- **Don't port-forward it to the internet.** Use it on the LAN, or from outside over Tailscale or the UniFi VPN.
-- API keys stay on the server. The browser only ever talks to BeechFront.
+Then, on the add-on's page:
+1. **Configuration tab:** enter your Unraid and UniFi addresses and API keys. The **Documentation** tab says where to create them. Home Assistant needs no setup.
+2. **Info tab:** turn on **Show in sidebar** and start the add-on.
 
 ## Development
 
 ```sh
+cd beechfront
 npm install
 npm run dev:demo     # sample data, no real systems needed → http://localhost:5173
-npm run dev          # uses config/config.yaml
-npm run build && npm start
+npm run build        # type-check and build the front end
 ```
 
-Demo mode (`BEECHFRONT_DEMO=1`) swaps every integration for in-memory sample data. Actions still work against that data, which makes it handy for working on the UI.
+Demo mode (`BEECHFRONT_DEMO=1`) swaps every integration for in-memory sample data, and actions still work against it. Outside Home Assistant, settings are read from `beechfront/config.yaml` (see `config.example.yaml`), including `homeassistant: { url, token }`. You can also set `BEECHFRONT_OPTIONS` to point at an `options.json` file.
 
 ### Layout
 
 ```
-server/                 Fastify API (Node 22, no build step)
-  index.js              routes, caching, static hosting
-  overview.js           builds the "Needs attention" list
-  integrations/         docker · unraid (GraphQL) · homeassistant · unifi · links · notes
-  demo.js               sample data
-web/src/                React + TypeScript front end (Vite)
-  pages/                one file per page
-  CommandPalette.tsx    ⌘K
-config/config.example.yaml
+repository.yaml            makes this repo an HA add-on repository
+beechfront/                the add-on
+  config.yaml              add-on manifest + Configuration tab schema
+  translations/en.yaml     labels for the Configuration tab
+  DOCS.md                  the add-on's Documentation tab
+  Dockerfile               built by the HA Supervisor
+  server/                  Fastify API (Node 22)
+    config.js              reads the add-on options and optional config.yaml
+    overview.js            builds the "Needs attention" list
+    integrations/          unraid (GraphQL, incl. containers) · homeassistant · unifi · links · notes
+  web/src/                 React + TypeScript front end (Vite)
 ```
 
-To add a new system, write `server/integrations/<name>.js`, give it routes in `server/index.js`, optionally add attention rules in `overview.js`, and add a page under `web/src/pages/`.
+### How it fits into Home Assistant
 
-### Notes on the APIs
-
-- **Unraid:** the GraphQL schema has changed between 7.x releases. Each section (system, array, VMs) is queried separately, with fallbacks, so a missing field only blanks that one card.
-- **UniFi:** uses the official Integration API. For a self-hosted Network Application, rather than a UniFi console or gateway, set `unifi.url` to it and adjust `apiBase` if necessary.
-- Self-signed certificates are accepted for Unraid, Home Assistant and UniFi by default. Set `insecure: false` on any of them to enforce validation.
+- **Ingress:** HA serves the UI under `/api/hassio_ingress/<token>/`, so the front end only uses relative URLs. The server rejects any connection that doesn't come from the Supervisor's ingress proxy.
+- **Home Assistant API:** reached through `http://supervisor/core` with the injected `SUPERVISOR_TOKEN` (`homeassistant_api: true`).
+- **Storage:** notes are kept in `/data`, so they're included in HA backups.
+- **Unraid:** the GraphQL schema has changed between 7.x releases. Each section is queried separately, with fallbacks, so a missing field only blanks one card.

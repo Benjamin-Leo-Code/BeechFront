@@ -1,0 +1,60 @@
+name: BeechFront
+version: "0.2.0"
+slug: beechfront
+description: Admin console for the house – Unraid, Home Assistant and UniFi in one place
+url: https://github.com/Benjamin-Leo-Code/BeechFront
+arch:
+  - amd64
+  - aarch64
+startup: application
+boot: auto
+init: true
+# Shown in the HA sidebar and the HA mobile app; HA handles sign-in.
+ingress: true
+ingress_port: 8099
+panel_icon: mdi:home-city-outline
+panel_title: BeechFront
+panel_admin: true
+homeassistant_api: true
+map:
+  - type: addon_config
+    read_only: false
+options:
+  title: Beech
+  unraid_url: ""
+  unraid_api_key: ""
+  favourite_containers: []
+  hidden_containers: []
+  ha_vm_name: Home Assistant
+  unifi_url: ""
+  unifi_api_key: ""
+  unifi_site: default
+  low_battery: 20
+  hidden_entities: []
+  links: []
+schema:
+  title: str
+  subtitle: str?
+  unraid_url: str
+  unraid_api_key: password
+  unraid_web_url: str?
+  unraid_host_address: str?
+  favourite_containers:
+    - str
+  hidden_containers:
+    - str
+  ha_vm_name: str
+  unifi_url: str
+  unifi_api_key: password
+  unifi_site: str
+  unifi_api_base: str?
+  low_battery: int(0,100)
+  hidden_entities:
+    - str
+  links:
+    - name: str
+      url: url
+      group: str?
+      icon: str?
+      pinned: bool?
+      check: bool?
