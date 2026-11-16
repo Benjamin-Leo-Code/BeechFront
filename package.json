@@ -1,0 +1,36 @@
+{
+  "name": "beechfront",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Front page and admin console for everything at Beech",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n server,web \"node --watch server/index.js\" \"vite\"",
+    "dev:demo": "concurrently -n server,web \"BEECHFRONT_DEMO=1 node --watch server/index.js\" \"vite\"",
+    "build": "tsc -p web && vite build",
+    "start": "node server/index.js",
+    "demo": "BEECHFRONT_DEMO=1 node server/index.js",
+    "typecheck": "tsc -p web"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.1.5",
+    "@fastify/static": "^10.1.11",
+    "fastify": "^5.12.8",
+    "undici": "^8.12.4",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "concurrently": "^10.0.7",
+    "lucide-react": "^1.73.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8"
+  }
+}

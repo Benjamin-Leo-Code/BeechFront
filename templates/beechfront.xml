@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- Copy to /boot/config/plugins/dockerMan/templates-user/my-beechfront.xml,
+     then Docker → Add Container → Template: beechfront -->
+<Container version="2">
+  <Name>beechfront</Name>
+  <Repository>ghcr.io/benjamin-leo-code/beechfront:latest</Repository>
+  <Registry>https://github.com/Benjamin-Leo-Code/BeechFront/pkgs/container/beechfront</Registry>
+  <Network>bridge</Network>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Overview>Home page and admin console for Unraid, Docker, Home Assistant and UniFi.</Overview>
+  <Category>Tools: Network:Management</Category>
+  <WebUI>http://[IP]:[PORT:8484]/</WebUI>
+  <Icon>https://raw.githubusercontent.com/Benjamin-Leo-Code/BeechFront/main/web/public/icon-512.png</Icon>
+  <Config Name="Web UI port" Target="8484" Default="8484" Mode="tcp" Type="Port" Display="always" Required="true">8484</Config>
+  <Config Name="Config" Target="/config" Default="/mnt/user/appdata/beechfront/config" Mode="rw" Type="Path" Display="always" Required="true">/mnt/user/appdata/beechfront/config</Config>
+  <Config Name="Data" Target="/data" Default="/mnt/user/appdata/beechfront/data" Mode="rw" Type="Path" Display="always" Required="true">/mnt/user/appdata/beechfront/data</Config>
+  <Config Name="Docker socket" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Type="Path" Display="advanced" Required="true">/var/run/docker.sock</Config>
+  <Config Name="Console password" Target="BEECHFRONT_PASSWORD" Default="" Mode="" Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Unraid API key" Target="UNRAID_API_KEY" Default="" Mode="" Type="Variable" Display="always" Required="false" Mask="true"/>
+  <Config Name="Home Assistant token" Target="HA_TOKEN" Default="" Mode="" Type="Variable" Display="always" Required="false" Mask="true"/>
+  <Config Name="UniFi API key" Target="UNIFI_API_KEY" Default="" Mode="" Type="Variable" Display="always" Required="false" Mask="true"/>
+</Container>

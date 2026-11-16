@@ -1,0 +1,17 @@
+# Alternative to the Unraid template – e.g. via the Compose Manager plugin.
+services:
+  beechfront:
+    image: ghcr.io/benjamin-leo-code/beechfront:latest
+    container_name: beechfront
+    restart: unless-stopped
+    ports:
+      - "8484:8484"
+    environment:
+      BEECHFRONT_PASSWORD: change-me
+      UNRAID_API_KEY: ""
+      HA_TOKEN: ""
+      UNIFI_API_KEY: ""
+    volumes:
+      - /mnt/user/appdata/beechfront/config:/config
+      - /mnt/user/appdata/beechfront/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
