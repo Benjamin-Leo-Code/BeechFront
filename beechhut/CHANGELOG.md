@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.4
+- Icon: larger door.
+
 ## 0.3.3
 - Icon: shallower roof pitch and a round door handle.
 

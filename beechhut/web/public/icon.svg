@@ -6,9 +6,9 @@
       <rect y="2.5" width="4" height="2.5" fill="#9cc98e"/>
     </pattern>
     <!-- Vertical planks for the door -->
-    <pattern id="planks" width="4" height="4" patternUnits="userSpaceOnUse" x="25">
-      <rect width="2" height="4" fill="#9cc98e"/>
-      <rect x="2" width="2" height="4" fill="#f6faf3"/>
+    <pattern id="planks" width="4.57" height="4" patternUnits="userSpaceOnUse" x="24">
+      <rect width="2.285" height="4" fill="#9cc98e"/>
+      <rect x="2.285" width="2.285" height="4" fill="#f6faf3"/>
     </pattern>
   </defs>
   <rect width="64" height="64" rx="14" fill="#2f5d3a"/>
@@ -17,11 +17,11 @@
   <!-- Corner posts -->
   <path d="M15 25v29M49 25v29" stroke="#f6faf3" stroke-width="2"/>
   <!-- Door -->
-  <rect x="25" y="28" width="14" height="26" fill="url(#planks)"/>
-  <path d="M25 54V28h14v26" fill="none" stroke="#1e4027" stroke-width="1.4" stroke-linejoin="round"/>
+  <rect x="24" y="24.3" width="16" height="29.7" fill="url(#planks)"/>
+  <path d="M24 54V24.3h16V54" fill="none" stroke="#1e4027" stroke-width="1.5" stroke-linejoin="round"/>
   <!-- Strap hinges and handle -->
-  <path d="M23.8 32.5h7.6M23.8 49h7.6" stroke="#1e4027" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="36.4" cy="40.8" r="1.35" fill="#1e4027"/>
+  <path d="M22.7 29.4h8.7M22.7 48.3h8.7" stroke="#1e4027" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="37" cy="38.9" r="1.5" fill="#1e4027"/>
   <!-- Roof: square-cut boards, small overhang, outlined -->
   <path d="M12.88 26.5 32 13l19.12 13.5 2.08-2.94L32 8.59 10.8 23.56Z" fill="#f6faf3" stroke="#1e4027" stroke-width="1.2" stroke-linejoin="miter"/>
   <!-- Base -->
