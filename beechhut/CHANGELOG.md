@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.5
+- Icon: wider hut with double doors, small hinges and a sliding bolt.
+
 ## 0.3.4
 - Icon: larger door.
 
