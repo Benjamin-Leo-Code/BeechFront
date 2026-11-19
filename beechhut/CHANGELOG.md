@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+- Renamed to BeechHut. The add-on slug has changed too, so Home Assistant treats it as a new add-on – see the README.
+- New apps bar at the top of the overview: every running container with a web UI, one tap to open. Favourite containers come first.
+- Quick launch now only shows pinned links (containers are in the apps bar).
+
 ## 0.2.0
 - Now a Home Assistant add-on: opens from the sidebar and the HA app, uses Home Assistant's sign-in, and connects to Home Assistant automatically.
 - Containers are controlled through the Unraid API (no Docker socket needed).

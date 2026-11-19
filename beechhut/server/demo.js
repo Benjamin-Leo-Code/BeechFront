@@ -1,6 +1,6 @@
 /**
  * In-memory stand-ins for every integration so the console can be previewed
- * (BEECHFRONT_DEMO=1) without access to the real house. Actions mutate state.
+ * (BEECHHUT_DEMO=1) without access to the real house. Actions mutate state.
  */
 const now = Date.now();
 const mins = (m) => now - m * 60000;

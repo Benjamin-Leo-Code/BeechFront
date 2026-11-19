@@ -1,6 +1,6 @@
 # Optional advanced configuration.
 # Most people only need the add-on's Configuration tab. For anything more,
-# put this file at /addon_configs/<id>_beechfront/config.yaml on your
+# put this file at /addon_configs/<id>_beechhut/config.yaml on your
 # Home Assistant host (with the File editor or Studio Code Server add-on).
 # Values on the Configuration tab take priority over this file.
 

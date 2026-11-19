@@ -75,10 +75,7 @@ export async function buildOverview({ c, config }) {
   const order = { alert: 0, warning: 1, info: 2 };
   attention.sort((a, b) => order[a.level] - order[b.level]);
 
-  const pinned = [
-    ...(links.status === 'ok' ? links.value.flatMap((g) => g.items).filter((l) => l.pinned) : []),
-    ...(containers.status === 'ok' ? containers.value.filter((ct) => ct.favourite && ct.url).map((ct) => ({ name: ct.name, url: ct.url, icon: ct.icon, running: ct.state === 'running' })) : []),
-  ];
+  const pinned = links.status === 'ok' ? links.value.flatMap((g) => g.items).filter((l) => l.pinned) : [];
 
   const ha = haStates.status === 'ok' ? haStates.value : [];
   return {

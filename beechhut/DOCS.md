@@ -1,4 +1,4 @@
-# BeechFront
+# BeechHut
 
 An admin console for the house, inside Home Assistant. It shows what needs attention across Unraid, Home Assistant and UniFi, and lets you act on it: restart containers, reboot VMs, install HA updates, restart UniFi devices, toggle lights and more. Press **⌘K** (or `/`) to search and run anything.
 
@@ -51,18 +51,18 @@ links:
 
 | Option | What it does |
 | --- | --- |
-| Favourite containers | Container names to show in Quick launch |
+| Favourite containers | Container names to show first in the apps bar at the top of the overview |
 | Hidden containers / Hidden entities | Things to leave out. For entities, end with `*` to match a prefix (e.g. `sensor.sun_*`) |
 | Home Assistant VM name | The name of this VM in Unraid, so the overview can show it |
 | Low battery threshold | Battery sensors at or below this % are flagged |
 
 ### Advanced
 
-For anything the Configuration tab doesn't cover, such as overriding a container's link or grouping links in YAML, create `config.yaml` in this add-on's config folder: `/addon_configs/<id>_beechfront/` on the host, which the File editor or Studio Code Server add-on can reach. See `config.example.yaml` in the repository.
+For anything the Configuration tab doesn't cover, such as overriding a container's link or grouping links in YAML, create `config.yaml` in this add-on's config folder: `/addon_configs/<id>_beechhut/` on the host, which the File editor or Studio Code Server add-on can reach. See `config.example.yaml` in the repository.
 
 ## Access and security
 
-- BeechFront only accepts connections through Home Assistant (ingress), so it uses your HA login. If you can reach HA remotely, e.g. through Nabu Casa, you can reach BeechFront too.
+- BeechHut only accepts connections through Home Assistant (ingress), so it uses your HA login. If you can reach HA remotely, e.g. through Nabu Casa, you can reach BeechHut too.
 - Only Home Assistant **administrators** should see it in the sidebar, because it can stop containers and reboot VMs. Panels for add-ons with ingress are admin-only by default.
 - Notes are stored in the add-on's own storage and included in Home Assistant backups.
 - Because it runs inside Home Assistant, it's unavailable while HA is down or restarting. Rebooting the Home Assistant VM from the Server page works, but the console will drop out until HA is back.

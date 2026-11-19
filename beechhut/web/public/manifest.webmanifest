@@ -1,6 +1,6 @@
 {
-  "name": "BeechFront",
-  "short_name": "BeechFront",
+  "name": "BeechHut",
+  "short_name": "BeechHut",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f6f5f1",

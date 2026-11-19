@@ -5,10 +5,10 @@ import YAML from 'yaml';
 /** Running as a Home Assistant add-on – the Supervisor injects this token. */
 export const ADDON = Boolean(process.env.SUPERVISOR_TOKEN);
 
-const OPTIONS_PATH = process.env.BEECHFRONT_OPTIONS || '/data/options.json';
+const OPTIONS_PATH = process.env.BEECHHUT_OPTIONS || '/data/options.json';
 // Optional advanced config: /addon_configs/<slug>/config.yaml on the HA host (mounted at /config).
-const CONFIG_PATH = path.resolve(process.env.BEECHFRONT_CONFIG || (ADDON ? '/config/config.yaml' : 'config.yaml'));
-export const DATA_DIR = path.resolve(process.env.BEECHFRONT_DATA || (ADDON ? '/data' : 'data'));
+const CONFIG_PATH = path.resolve(process.env.BEECHHUT_CONFIG || (ADDON ? '/config/config.yaml' : 'config.yaml'));
+export const DATA_DIR = path.resolve(process.env.BEECHHUT_DATA || (ADDON ? '/data' : 'data'));
 
 /** Replace ${VAR} and ${VAR:-default} with environment values, recursively. */
 function interpolate(value) {
@@ -51,10 +51,10 @@ export function loadConfig() {
 
   return {
     addon: ADDON,
-    title: pick(o.title, y.title) || 'BeechFront',
+    title: pick(o.title, y.title) || 'BeechHut',
     subtitle: pick(o.subtitle, y.subtitle) || '',
     port: Number(process.env.PORT || (ADDON ? 8099 : 8484)),
-    demo: process.env.BEECHFRONT_DEMO === '1',
+    demo: process.env.BEECHHUT_DEMO === '1',
     unraid: unraidUrl ? {
       url: unraidUrl,
       webUrl: trimSlash(pick(o.unraid_web_url, y.unraid?.webUrl, unraidUrl)),

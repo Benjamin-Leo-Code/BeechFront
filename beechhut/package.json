@@ -1,15 +1,15 @@
 {
-  "name": "beechfront",
+  "name": "beechhut",
   "version": "0.1.0",
   "private": true,
   "description": "Home Assistant add-on: admin console for everything at Beech",
   "type": "module",
   "scripts": {
     "dev": "concurrently -n server,web \"node --watch server/index.js\" \"vite\"",
-    "dev:demo": "concurrently -n server,web \"BEECHFRONT_DEMO=1 node --watch server/index.js\" \"vite\"",
+    "dev:demo": "concurrently -n server,web \"BEECHHUT_DEMO=1 node --watch server/index.js\" \"vite\"",
     "build": "tsc -p web && vite build",
     "start": "node server/index.js",
-    "demo": "BEECHFRONT_DEMO=1 node server/index.js",
+    "demo": "BEECHHUT_DEMO=1 node server/index.js",
     "typecheck": "tsc -p web"
   },
   "engines": {

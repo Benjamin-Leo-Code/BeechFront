@@ -66,7 +66,7 @@ const INGRESS_PROXY = '172.30.32.2';
 if (config.addon) {
   app.addHook('onRequest', async (req, reply) => {
     const ip = req.socket.remoteAddress?.replace(/^::ffff:/, '');
-    if (ip !== INGRESS_PROXY && ip !== '127.0.0.1') return reply.code(403).send({ error: 'Open BeechFront from the Home Assistant sidebar' });
+    if (ip !== INGRESS_PROXY && ip !== '127.0.0.1') return reply.code(403).send({ error: 'Open BeechHut from the Home Assistant sidebar' });
   });
 }
 
@@ -148,4 +148,4 @@ if (fs.existsSync(dist)) {
 }
 
 await app.listen({ host: '0.0.0.0', port: config.port });
-console.log(`BeechFront listening on :${config.port}${config.demo ? ' (demo mode)' : ''}${config.addon ? ' (Home Assistant add-on)' : ''}`);
+console.log(`BeechHut listening on :${config.port}${config.demo ? ' (demo mode)' : ''}${config.addon ? ' (Home Assistant add-on)' : ''}`);

@@ -4,7 +4,7 @@ import { useApi } from '../api';
 import { navigate } from '../router';
 import { AppIcon, Bar, Card, Dot, ErrorNote, Loading, type Tone } from '../ui';
 import { bitrate, kib, pct, since } from '../format';
-import type { Meta, Overview } from '../types';
+import type { Container, Meta, Overview } from '../types';
 
 const levelTone: Record<string, Tone> = { alert: 'bad', warning: 'warn', info: 'info' };
 
@@ -23,6 +23,25 @@ function Clock() {
   );
 }
 
+/** Every running container that has a web UI, favourites first – one tap to open. */
+function AppsBar() {
+  const { data } = useApi<Container[]>('/containers', 10000);
+  const apps = (data || [])
+    .filter((c) => c.state === 'running' && c.url)
+    .sort((a, b) => Number(b.favourite) - Number(a.favourite) || a.name.localeCompare(b.name));
+  if (!apps.length) return null;
+  return (
+    <nav className="apps-bar" aria-label="Running apps">
+      {apps.map((c) => (
+        <a key={c.id} href={c.url!} target="_blank" rel="noreferrer" title={`Open ${c.name}`}>
+          <AppIcon src={c.icon} name={c.name} size={40} />
+          <span>{c.name}</span>
+        </a>
+      ))}
+    </nav>
+  );
+}
+
 const isErr = (t: object): t is { error?: string; off?: boolean } => 'error' in t || 'off' in t;
 
 export function OverviewPage({ meta }: { meta: Meta }) {
@@ -30,6 +49,7 @@ export function OverviewPage({ meta }: { meta: Meta }) {
 
   return (
     <div className="page">
+      {meta.integrations.unraid && <AppsBar />}
       <div className="page-head">
         <div><h1>{greeting()}</h1><Clock /></div>
       </div>

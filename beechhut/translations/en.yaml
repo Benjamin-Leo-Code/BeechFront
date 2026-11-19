@@ -18,7 +18,7 @@ configuration:
     description: Optional. Address used to build container web UI links. Defaults to the host in the Unraid address.
   favourite_containers:
     name: Favourite containers
-    description: Container names to show in Quick launch on the overview.
+    description: Container names to show first in the apps bar at the top of the overview.
   hidden_containers:
     name: Hidden containers
     description: Container names to leave out entirely.

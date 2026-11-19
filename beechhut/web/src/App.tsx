@@ -47,7 +47,7 @@ export function App() {
 
   useEffect(() => {
     const label = NAV.find((n) => n.page === page)?.label;
-    document.title = meta ? `${label} · ${meta.title}` : 'BeechFront';
+    document.title = meta ? `${label} · ${meta.title}` : 'BeechHut';
     setMore(false);
     window.scrollTo({ top: 0 });
   }, [page, meta]);
