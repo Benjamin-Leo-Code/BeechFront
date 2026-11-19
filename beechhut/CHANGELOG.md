@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.3
+- Icon: shallower roof pitch and a round door handle.
+
 ## 0.3.2
 - Icon: bigger hut, outlined square-ended roof with less overhang, no ground line.
 

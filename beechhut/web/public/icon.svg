@@ -13,17 +13,17 @@
   </defs>
   <rect width="64" height="64" rx="14" fill="#2f5d3a"/>
   <!-- Hut body: walls + gable in one striped shape -->
-  <path d="M15 54V25l17-14.5L49 25v29Z" fill="url(#boards)"/>
+  <path d="M15 54V25l17-12 17 12v29Z" fill="url(#boards)"/>
   <!-- Corner posts -->
   <path d="M15 25v29M49 25v29" stroke="#f6faf3" stroke-width="2"/>
   <!-- Door -->
   <rect x="25" y="28" width="14" height="26" fill="url(#planks)"/>
   <path d="M25 54V28h14v26" fill="none" stroke="#1e4027" stroke-width="1.4" stroke-linejoin="round"/>
-  <!-- Strap hinges and latch -->
+  <!-- Strap hinges and handle -->
   <path d="M23.8 32.5h7.6M23.8 49h7.6" stroke="#1e4027" stroke-width="1.8" stroke-linecap="round"/>
-  <rect x="35.6" y="38.8" width="2" height="4" rx="0.6" fill="#1e4027"/>
+  <circle cx="36.4" cy="40.8" r="1.35" fill="#1e4027"/>
   <!-- Roof: square-cut boards, small overhang, outlined -->
-  <path d="M13 26.7 32 10.5l19 16.2 2.3-2.75L32 5.75 10.7 23.95Z" fill="#f6faf3" stroke="#1e4027" stroke-width="1.2" stroke-linejoin="miter"/>
+  <path d="M12.88 26.5 32 13l19.12 13.5 2.08-2.94L32 8.59 10.8 23.56Z" fill="#f6faf3" stroke="#1e4027" stroke-width="1.2" stroke-linejoin="miter"/>
   <!-- Base -->
   <rect x="13" y="53" width="38" height="3.4" rx="0.8" fill="#1e4027"/>
 </svg>
