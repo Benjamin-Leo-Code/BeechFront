@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.1
+- New icon: a striped beach hut, in the same green and white.
+
 ## 0.3.0
 - Renamed to BeechHut. The add-on slug has changed too, so Home Assistant treats it as a new add-on – see the README.
 - New apps bar at the top of the overview: every running container with a web UI, one tap to open. Favourite containers come first.
