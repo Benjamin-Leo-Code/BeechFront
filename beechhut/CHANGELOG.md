@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.2
+- Icon: bigger hut, outlined square-ended roof with less overhang, no ground line.
+
 ## 0.3.1
 - New icon: a striped beach hut, in the same green and white.
 
