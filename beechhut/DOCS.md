@@ -56,6 +56,16 @@ links:
 | Home Assistant VM name | The name of this VM in Unraid, so the overview can show it |
 | Low battery threshold | Battery sensors at or below this % are flagged |
 
+### House Plan
+
+Scan a room with an iPhone or iPad that has LiDAR, using an app such as Magicplan, Polycam or 3D Scanner App. Export it as **USDZ** (or **GLB**), then use **Upload scan** on the House Plan page. You can keep several plans, for example one per floor plus the garden, and rename or delete them there.
+
+In the viewer, drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to move. The buttons reset the view, look straight down, cut the walls down to waist height so you can see inside, and go full screen. Tap anything to see what it is (wall, door, window, sofa and so on).
+
+Some apps label their measurements wrongly, which would make the model 10, 100 or 1,000 times too big or too small. BeechHut corrects for this automatically, and shows the plan's overall size under the viewer so you can check it against the real room.
+
+Plans are stored in the add-on's own storage, so they're included in Home Assistant backups and never leave your network.
+
 ### Advanced
 
 For anything the Configuration tab doesn't cover, such as overriding a container's link or grouping links in YAML, create `config.yaml` in this add-on's config folder: `/addon_configs/<id>_beechhut/` on the host, which the File editor or Studio Code Server add-on can reach. See `config.example.yaml` in the repository.

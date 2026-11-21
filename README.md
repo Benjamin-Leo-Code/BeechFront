@@ -13,6 +13,7 @@ It's meant for running the house, so you can act on things from it as well as lo
 | **Server** | Unraid CPU, RAM, array capacity, per-disk usage, temperatures and errors, and unread notifications. Start, shut down, reboot or force-stop VMs. |
 | **Home** | Lights, switches, heating, locks, covers, scenes, scripts and automations, all controllable. You can also install updates, check the config, restart HA and search every entity. |
 | **Network** | WAN throughput, UniFi devices (with CPU, memory and a restart button) and every client, searchable by name, IP or MAC. |
+| **House Plan** | A 3D model of the house from your phone's LiDAR scans (USDZ or GLB). Spin it round, zoom in, look from above, cut the walls down to see inside, and tap things to identify them. Plans are stored in the add-on, so they're included in HA backups. |
 | **Links** | Grouped bookmarks with live up/down checks. Container web UIs are added automatically. |
 | **Notes** | House notes: boiler service dates, where the stopcock is, to-dos. |
 
@@ -65,8 +66,8 @@ beechhut/                the add-on
   server/                  Fastify API (Node 22)
     config.js              reads the add-on options and optional config.yaml
     overview.js            builds the "Needs attention" list
-    integrations/          unraid (GraphQL, incl. containers) · homeassistant · unifi · links · notes
-  web/src/                 React + TypeScript front end (Vite)
+    integrations/          unraid (GraphQL, incl. containers) · homeassistant · unifi · links · notes · plans
+  web/src/                 React + TypeScript front end (Vite); pages/PlanViewer.tsx is the three.js 3D viewer
 ```
 
 ### How it fits into Home Assistant

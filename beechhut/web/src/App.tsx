@@ -1,10 +1,10 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
 import {
-  LayoutGrid, Boxes, Server, House, Network, Link2, NotebookPen, Search, MoreHorizontal, Command,
+  LayoutGrid, Boxes, Server, House, Network, Link2, NotebookPen, Search, MoreHorizontal, Command, Box,
 } from 'lucide-react';
 import { useApi } from './api';
 import { navigate, useRoute } from './router';
-import { ConfirmHost, Toaster, Button } from './ui';
+import { ConfirmHost, Toaster, Button, Loading } from './ui';
 import { CommandPalette } from './CommandPalette';
 import type { Meta, Page } from './types';
 import { OverviewPage } from './pages/Overview';
@@ -15,19 +15,23 @@ import { NetworkPage } from './pages/Network';
 import { LinksPage } from './pages/Links';
 import { NotesPage } from './pages/Notes';
 
+// The 3D viewer pulls in three.js, so it's only downloaded when you open the page.
+const HousePlanPage = lazy(() => import('./pages/HousePlan'));
+
 export const NAV: { page: Page; label: string; icon: ReactNode; mobile?: boolean }[] = [
   { page: 'overview', label: 'Overview', icon: <LayoutGrid size={20} />, mobile: true },
   { page: 'containers', label: 'Containers', icon: <Boxes size={20} />, mobile: true },
   { page: 'server', label: 'Server', icon: <Server size={20} /> },
   { page: 'home', label: 'Home', icon: <House size={20} />, mobile: true },
   { page: 'network', label: 'Network', icon: <Network size={20} />, mobile: true },
+  { page: 'plan', label: 'House Plan', icon: <Box size={20} /> },
   { page: 'links', label: 'Links', icon: <Link2 size={20} /> },
   { page: 'notes', label: 'Notes', icon: <NotebookPen size={20} /> },
 ];
 
 const PAGES: Record<Page, (p: { meta: Meta }) => ReactNode> = {
   overview: OverviewPage, containers: ContainersPage, server: ServerPage, home: HomePage,
-  network: NetworkPage, links: LinksPage, notes: NotesPage,
+  network: NetworkPage, plan: HousePlanPage, links: LinksPage, notes: NotesPage,
 };
 
 export function App() {
@@ -90,7 +94,7 @@ export function App() {
 
       <main className="main">
         {meta.demo && <div className="demo-banner">Demo mode – showing sample data, nothing is connected.</div>}
-        <Current meta={meta} />
+        <Suspense fallback={<div className="page"><Loading rows={3} /></div>}><Current meta={meta} /></Suspense>
       </main>
 
       <nav className="tabbar">

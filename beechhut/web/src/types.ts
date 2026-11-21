@@ -1,5 +1,5 @@
 export type Level = 'alert' | 'warning' | 'info';
-export type Page = 'overview' | 'containers' | 'server' | 'home' | 'network' | 'links' | 'notes';
+export type Page = 'overview' | 'containers' | 'server' | 'home' | 'network' | 'plan' | 'links' | 'notes';
 
 export interface Meta {
   title: string;
@@ -49,6 +49,8 @@ export interface Unifi { version: string | null; devices: UnifiDevice[]; clients
 export interface Health { up: boolean; status: number; ms: number | null; error?: string }
 export interface Link { name: string; url: string; description: string; icon: string | null; pinned: boolean; health?: Health | null; running?: boolean }
 export interface LinkGroup { name: string; items: Link[] }
+
+export interface Plan { id: string; name: string; format: 'usdz' | 'glb'; size: number; created: number; updated: number }
 
 export interface Note { id: string; title: string; body: string; pinned: boolean; created: number; updated: number }
 

@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs';
+import { createReadStream } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
@@ -10,6 +11,7 @@ import { createHomeAssistant } from './integrations/homeassistant.js';
 import { createUnifi } from './integrations/unifi.js';
 import { createLinks } from './integrations/links.js';
 import { createNotes } from './integrations/notes.js';
+import { createPlans } from './integrations/plans.js';
 import { demo, demoLinks } from './demo.js';
 import { buildOverview } from './overview.js';
 
@@ -27,6 +29,7 @@ const i = config.demo
       links: createLinks(config.links),
     };
 const notes = createNotes(DATA_DIR);
+const plans = createPlans(DATA_DIR);
 
 function demoLinkStore() {
   const store = createLinks(demoLinks.map((g) => ({ ...g, items: g.items.map((l) => ({ ...l, check: false })) })));
@@ -130,6 +133,20 @@ app.get('/api/links', async () => c.links());
 app.get('/api/notes', async () => notes.list());
 app.post('/api/notes', async (req) => notes.save(req.body || {}));
 app.delete('/api/notes/:id', async (req) => notes.remove(req.params.id));
+
+// House plans (3D scans)
+app.addContentTypeParser('application/octet-stream', { parseAs: 'buffer', bodyLimit: 200 * 1024 * 1024 }, (_req, body, done) => done(null, body));
+app.get('/api/plans', async () => plans.list());
+app.post('/api/plans', { bodyLimit: 200 * 1024 * 1024 }, async (req) =>
+  plans.add({ name: req.query.name, filename: req.query.filename, buffer: req.body }));
+app.patch('/api/plans/:id', async (req) => plans.rename(req.params.id, req.body?.name));
+app.delete('/api/plans/:id', async (req) => plans.remove(req.params.id));
+app.get('/api/plans/:id/model', async (req, reply) => {
+  const { plan, file, type } = await plans.model(req.params.id);
+  reply.header('cache-control', 'private, max-age=31536000, immutable'); // URL carries ?v=<updated>
+  reply.header('content-length', plan.size);
+  return reply.type(type).send(createReadStream(file));
+});
 
 // ── Front end ───────────────────────────────────────────────────────────────
 const dist = path.resolve(here, '../web/dist');

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+- New **House Plan** page: upload LiDAR scans (USDZ or GLB) and explore them in 3D – rotate, zoom, top-down view, wall cutaway, full screen, and tap to identify walls, doors, windows and furniture.
+- Scans with mislabelled units are rescaled automatically, and the plan's real-world size is shown.
+
 ## 0.3.5
 - Icon: wider hut with double doors, small hinges and a sliding bolt.
 
