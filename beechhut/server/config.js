@@ -82,6 +82,19 @@ export function loadConfig() {
       apiBase: trimSlash(pick(o.unifi_api_base, y.unifi?.apiBase) || '/proxy/network/integration/v1'),
       insecure: y.unifi?.insecure !== false,
     } : null,
+    // The 3D house plan: a folder in a (private) GitHub repo, or a local folder when developing.
+    housePlan: (() => {
+      const localDir = process.env.BEECHHUT_HOUSE_PLAN_DIR || y.house_plan?.localDir;
+      const repository = pick(o.house_plan_repository, y.house_plan?.repository);
+      if (localDir) return { localDir: path.resolve(localDir) };
+      if (!repository) return null;
+      return {
+        repository,
+        branch: pick(o.house_plan_branch, y.house_plan?.branch) || 'house-plan',
+        path: pick(o.house_plan_path, y.house_plan?.path) ?? 'house-plan',
+        token: pick(o.github_token, y.house_plan?.token) || '',
+      };
+    })(),
     links: !blank(o.links) ? groupLinks(o.links) : Array.isArray(y.links) ? y.links : [],
   };
 }

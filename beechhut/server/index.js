@@ -11,7 +11,7 @@ import { createHomeAssistant } from './integrations/homeassistant.js';
 import { createUnifi } from './integrations/unifi.js';
 import { createLinks } from './integrations/links.js';
 import { createNotes } from './integrations/notes.js';
-import { createPlans } from './integrations/plans.js';
+import { createHousePlan } from './integrations/houseplan.js';
 import { demo, demoLinks } from './demo.js';
 import { buildOverview } from './overview.js';
 
@@ -29,7 +29,7 @@ const i = config.demo
       links: createLinks(config.links),
     };
 const notes = createNotes(DATA_DIR);
-const plans = createPlans(DATA_DIR);
+const housePlan = createHousePlan(config.housePlan, DATA_DIR);
 
 function demoLinkStore() {
   const store = createLinks(demoLinks.map((g) => ({ ...g, items: g.items.map((l) => ({ ...l, check: false })) })));
@@ -134,17 +134,12 @@ app.get('/api/notes', async () => notes.list());
 app.post('/api/notes', async (req) => notes.save(req.body || {}));
 app.delete('/api/notes/:id', async (req) => notes.remove(req.params.id));
 
-// House plans (3D scans)
-app.addContentTypeParser('application/octet-stream', { parseAs: 'buffer', bodyLimit: 200 * 1024 * 1024 }, (_req, body, done) => done(null, body));
-app.get('/api/plans', async () => plans.list());
-app.post('/api/plans', { bodyLimit: 200 * 1024 * 1024 }, async (req) =>
-  plans.add({ name: req.query.name, filename: req.query.filename, buffer: req.body }));
-app.patch('/api/plans/:id', async (req) => plans.rename(req.params.id, req.body?.name));
-app.delete('/api/plans/:id', async (req) => plans.remove(req.params.id));
-app.get('/api/plans/:id/model', async (req, reply) => {
-  const { plan, file, type } = await plans.model(req.params.id);
-  reply.header('cache-control', 'private, max-age=31536000, immutable'); // URL carries ?v=<updated>
-  reply.header('content-length', plan.size);
+// House plan (read from a GitHub repository, set on the Configuration tab)
+app.get('/api/house-plan', async () => (housePlan ? { configured: true, ...(await housePlan.plan()) } : { configured: false }));
+app.get('/api/house-plan/files/:key', async (req, reply) => {
+  const { path: file, type, size } = await need(housePlan, 'The house plan').file(req.params.key);
+  reply.header('cache-control', 'private, max-age=31536000, immutable'); // the key is the file's content hash
+  reply.header('content-length', size);
   return reply.type(type).send(createReadStream(file));
 });
 

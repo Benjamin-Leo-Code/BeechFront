@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { USDLoader } from 'three/addons/loaders/USDLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import type { PlanPart } from '../types';
 
 export interface ViewerControls {
   reset(): void;
@@ -59,8 +60,33 @@ async function loadModel(url: string, format: string): Promise<{ model: THREE.Ob
   return { model, textures };
 }
 
-export function PlanViewer({ url, format, onSelect, onReady, controlsRef }: {
-  url: string; format: string; onSelect: (label: string | null) => void; onReady?: (size: PlanSize) => void; controlsRef: Ref<ViewerControls>;
+/** Load every part of the plan and put each where plan.json says, in metres. */
+async function loadPlan(parts: PlanPart[]): Promise<{ model: THREE.Group; textures: Promise<unknown> }> {
+  const loaded = await Promise.all(parts.map(async (part) => {
+    const { model, textures } = await loadModel(part.url, part.format);
+    model.name = model.name || part.id;
+    const scale = part.unitScale ?? plausibleScale(new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3()));
+    const holder = new THREE.Group();
+    holder.name = part.id;
+    holder.userData.part = part;
+    holder.add(model);
+    holder.scale.setScalar(scale);
+    holder.rotation.y = THREE.MathUtils.degToRad(part.rotation);
+    holder.position.fromArray(part.position);
+    return { holder, textures };
+  }));
+  const house = new THREE.Group();
+  for (const { holder } of loaded) house.add(holder);
+  return { model: house, textures: Promise.all(loaded.map((l) => l.textures)) };
+}
+
+const partOf = (obj: THREE.Object3D): PlanPart | null => {
+  for (let o: THREE.Object3D | null = obj; o; o = o.parent) if (o.userData.part) return o.userData.part as PlanPart;
+  return null;
+};
+
+export function PlanViewer({ parts, onSelect, onReady, controlsRef }: {
+  parts: PlanPart[]; onSelect: (label: string | null) => void; onReady?: (size: PlanSize) => void; controlsRef: Ref<ViewerControls>;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const api = useRef<ViewerControls>({ reset() {}, top() {}, cutaway() {} });
@@ -75,6 +101,8 @@ export function PlanViewer({ url, format, onSelect, onReady, controlsRef }: {
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     el.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -82,7 +110,11 @@ export function PlanViewer({ url, format, onSelect, onReady, controlsRef }: {
     scene.add(new THREE.HemisphereLight(0xffffff, 0x6f7a6c, 1.5));
     const key = new THREE.DirectionalLight(0xffffff, 2.2);
     key.position.set(5, 10, 7);
-    scene.add(key);
+    key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048);
+    key.shadow.radius = 6;
+    key.shadow.bias = -0.0005;
+    scene.add(key, key.target);
     const fill = new THREE.DirectionalLight(0xffffff, 0.6);
     fill.position.set(-6, 4, -5);
     scene.add(fill);
@@ -161,17 +193,17 @@ export function PlanViewer({ url, format, onSelect, onReady, controlsRef }: {
       selected = { mesh, material: mesh.material };
       mesh.material = new THREE.MeshStandardMaterial({ color: 0x9cc98e, emissive: 0x2f5d3a, emissiveIntensity: 0.2, side: THREE.DoubleSide });
       invalidate();
-      onSelect(kindOf(mesh));
+      const part = partOf(mesh);
+      onSelect(part && part.name !== kindOf(mesh) ? `${kindOf(mesh)} · ${part.name}` : kindOf(mesh));
     };
     renderer.domElement.addEventListener('pointerdown', onDown);
     renderer.domElement.addEventListener('pointerup', onUp);
 
-    loadModel(url, format)
+    loadPlan(parts)
       .then(({ model: m, textures }) => {
         if (disposed) return;
         model = m;
-        // Work in real metres, then sit the model on the floor, centred on the origin.
-        m.scale.multiplyScalar(plausibleScale(new THREE.Box3().setFromObject(m).getSize(new THREE.Vector3())));
+        // Sit the whole house on the ground, centred on the origin.
         m.updateMatrixWorld(true);
         const box = new THREE.Box3().setFromObject(m);
         const size = box.getSize(new THREE.Vector3());
@@ -180,20 +212,28 @@ export function PlanViewer({ url, format, onSelect, onReady, controlsRef }: {
         scene.add(m);
         radius = Math.max(size.length() / 2, 0.5);
         centreY = size.y;
-        // A 50 cm grid for a sense of scale.
-        const extent = Math.ceil(Math.max(size.x, size.z) + 2);
-        const grid = new THREE.GridHelper(extent, extent * 2, 0x8a8f86, 0x8a8f86);
-        (grid.material as THREE.Material).transparent = true;
-        (grid.material as THREE.Material).opacity = 0.25;
-        grid.position.y = -0.002;
-        scene.add(grid);
+        // No ground or grid – the house floats on the page, with just a soft shadow beneath.
+        m.traverse((o) => { if ((o as THREE.Mesh).isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+        const extent = Math.max(size.x, size.z) * 1.6 + 2;
+        const ground = new THREE.Mesh(new THREE.PlaneGeometry(extent, extent), new THREE.ShadowMaterial({ opacity: 0.16 }));
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -0.001;
+        ground.receiveShadow = true;
+        scene.add(ground);
+        const s = key.shadow.camera;
+        s.left = s.bottom = -extent / 2;
+        s.right = s.top = extent / 2;
+        s.near = 0.1;
+        s.far = 60;
+        key.position.set(size.x * 0.6 + 4, size.y + 10, size.z * 0.4 + 6);
+        s.updateProjectionMatrix();
         frame('reset');
         resize();
         setStatus('ready');
         onReady?.({ width: size.x, depth: size.z, height: size.y });
         textures.then(invalidate);
       })
-      .catch((err: Error) => !disposed && setStatus(err.message || 'Couldn’t open this model'));
+      .catch((err: Error) => !disposed && setStatus(err.message || 'Couldn’t open the house plan'));
 
     return () => {
       disposed = true;
@@ -214,11 +254,11 @@ export function PlanViewer({ url, format, onSelect, onReady, controlsRef }: {
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [url, format]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [parts.map((p) => `${p.url}|${p.position}|${p.rotation}|${p.unitScale}`).join(',')]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="plan-canvas" ref={host}>
-      {status === 'loading' && <div className="plan-overlay">Loading model…</div>}
+      {status === 'loading' && <div className="plan-overlay">Loading the house…</div>}
       {status !== 'loading' && status !== 'ready' && <div className="plan-overlay error">{status}</div>}
     </div>
   );

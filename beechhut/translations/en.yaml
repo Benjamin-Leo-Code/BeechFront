@@ -41,6 +41,18 @@ configuration:
   hidden_entities:
     name: Hidden entities
     description: Entity IDs to ignore. End with * to match a prefix, e.g. sensor.sun_*
+  house_plan_repository:
+    name: House plan repository
+    description: The GitHub repository the house plan is kept in, as owner/repository. Leave blank to hide the plan.
+  house_plan_branch:
+    name: House plan branch
+    description: Keep the plan on its own branch if the repository is also copied into Home Assistant's www folder, which anyone can read without logging in.
+  house_plan_path:
+    name: House plan folder
+    description: The folder in the repository that holds plan.json. Use / for the top level.
+  github_token:
+    name: GitHub token
+    description: A fine-grained personal access token with Contents (Read-only) access to just that repository.
   links:
     name: Links
     description: Bookmarks. Icon is a name from dashboardicons.com (e.g. plex) or an image URL. Pinned links go in Quick launch.

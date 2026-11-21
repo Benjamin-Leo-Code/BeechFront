@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0
+- House Plan is now a single view of the whole house, floating on the page with a soft shadow. It has no upload button, file list or frame.
+- The plan is read from a folder in a GitHub repository (it can be private): `plan.json` lists each part of the house (rooms, floors, garden) and where it sits. Set the repository, branch, folder and a read-only token on the Configuration tab.
+- Files are cached by their content hash and the plan checks for changes about once a minute. Settings mistakes are reported on the page and don't stop the add-on.
+- Plans uploaded in 0.4.0 are no longer used. They're left in the add-on's storage under `plans/`.
+
 ## 0.4.0
 - New **House Plan** page: upload LiDAR scans (USDZ or GLB) and explore them in 3D – rotate, zoom, top-down view, wall cutaway, full screen, and tap to identify walls, doors, windows and furniture.
 - Scans with mislabelled units are rescaled automatically, and the plan's real-world size is shown.

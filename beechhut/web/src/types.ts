@@ -50,7 +50,11 @@ export interface Health { up: boolean; status: number; ms: number | null; error?
 export interface Link { name: string; url: string; description: string; icon: string | null; pinned: boolean; health?: Health | null; running?: boolean }
 export interface LinkGroup { name: string; items: Link[] }
 
-export interface Plan { id: string; name: string; format: 'usdz' | 'glb'; size: number; created: number; updated: number }
+export interface PlanPart {
+  id: string; name: string; level: string | null; format: 'usdz' | 'glb'; url: string; size: number;
+  position: [number, number, number]; rotation: number; unitScale: number | null;
+}
+export type HousePlan = { configured: false } | { configured: true; name: string; revision: string | null; parts: PlanPart[] };
 
 export interface Note { id: string; title: string; body: string; pinned: boolean; created: number; updated: number }
 
