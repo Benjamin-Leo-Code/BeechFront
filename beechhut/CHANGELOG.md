@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.0
+- The house plan is now loaded straight from a folder served by Home Assistant, e.g. `/local/<folder>/house-plan/` in the `www` folder. The GitHub settings and token are gone; set **House plan address** on the Configuration tab instead.
+
 ## 0.5.0
 - House Plan is now a single view of the whole house, floating on the page with a soft shadow. It has no upload button, file list or frame.
 - The plan is read from a folder in a GitHub repository (it can be private): `plan.json` lists each part of the house (rooms, floors, garden) and where it sits. Set the repository, branch, folder and a read-only token on the Configuration tab.

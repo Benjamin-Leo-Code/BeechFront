@@ -1,5 +1,5 @@
 name: BeechHut
-version: "0.5.0"
+version: "0.6.0"
 slug: beechhut
 description: Admin console for the house – Unraid, Home Assistant and UniFi in one place
 url: https://github.com/Benjamin-Leo-Code/BeechHut
@@ -32,10 +32,7 @@ options:
   low_battery: 20
   hidden_entities: []
   links: []
-  house_plan_repository: ""
-  house_plan_branch: house-plan
-  house_plan_path: house-plan
-  github_token: ""
+  house_plan_url: ""
 schema:
   title: str
   subtitle: str?
@@ -62,7 +59,4 @@ schema:
       icon: str?
       pinned: bool?
       check: bool?
-  house_plan_repository: str
-  house_plan_branch: str
-  house_plan_path: str
-  github_token: password
+  house_plan_url: str

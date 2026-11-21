@@ -9,6 +9,7 @@ export interface Meta {
   integrations: { unraid: boolean; homeassistant: boolean; unifi: boolean };
   webUrls: { unraid: string | null; unifi: string | null };
   haVmName: string;
+  housePlanUrl: string;
 }
 
 export interface Container {
@@ -51,10 +52,10 @@ export interface Link { name: string; url: string; description: string; icon: st
 export interface LinkGroup { name: string; items: Link[] }
 
 export interface PlanPart {
-  id: string; name: string; level: string | null; format: 'usdz' | 'glb'; url: string; size: number;
+  id: string; name: string; level: string | null; format: 'usdz' | 'glb'; url: string;
   position: [number, number, number]; rotation: number; unitScale: number | null;
 }
-export type HousePlan = { configured: false } | { configured: true; name: string; revision: string | null; parts: PlanPart[] };
+export interface HousePlan { name: string; parts: PlanPart[] }
 
 export interface Note { id: string; title: string; body: string; pinned: boolean; created: number; updated: number }
 

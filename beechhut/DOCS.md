@@ -60,23 +60,14 @@ links:
 
 The House Plan page shows the whole house in 3D, floating on the page. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to move. The buttons reset the view, look straight down, cut the walls down to waist height so you can see inside, and go full screen. Tap anything to see what it is (for example *Sofa · Living room*).
 
-The plan isn't uploaded through BeechHut. It's kept in a folder in a GitHub repository, which can be private:
+The plan is a folder of files that BeechHut loads directly. It contains:
 
-- **`plan.json`** lists every part of the house, such as a scan of each room, floor or the garden, and where each one sits.
-- **The model files** sit alongside it (USDZ or GLB, e.g. LiDAR scans from Magicplan or Polycam).
+- **`plan.json`**, which lists every part of the house (a scan of each room, floor or the garden) and where each one sits;
+- **the model files** it refers to (USDZ or GLB, e.g. LiDAR scans from Magicplan or Polycam).
 
-BeechHut reads the folder with a read-only token and caches the files in its own storage, so they're included in Home Assistant backups. It checks for changes about once a minute, so updates to the plan appear on their own.
+The easiest place for the folder is Home Assistant's `www` folder. Then set **House plan address** on the Configuration tab to its `/local/` path; for example, `/config/www/my-folder/house-plan/` becomes `/local/my-folder/house-plan/`. The browser loads the files straight from there, so no sign-in or token is needed, and anything in `www` can be read without logging in anyway. A full web address works too, if the files are on a server that allows it.
 
-To set it up, fill in these options on the Configuration tab:
-
-| Option | What to enter |
-| --- | --- |
-| House plan repository | `owner/repository` on GitHub |
-| House plan branch | The branch the plan is on (default `house-plan`) |
-| House plan folder | The folder holding `plan.json` (default `house-plan`, or `/` for the top level) |
-| GitHub token | A fine-grained personal access token with **Contents: Read-only** on just that repository |
-
-> If the same repository is copied into Home Assistant's `www` folder (e.g. for a dashboard), keep the plan on a branch that isn't copied there. Anything in `www` can be read without logging in.
+BeechHut checks `plan.json` for changes every couple of minutes while the page is open, so updates to the plan appear on their own.
 
 `plan.json` looks like this:
 
